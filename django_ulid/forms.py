@@ -23,6 +23,6 @@ class ULIDField(forms.CharField):
         if value in self.empty_values:
             return None
         try:
-            return ulid.parse(value)
+            return str(ulid.parse(value))
         except (AttributeError, ValueError):
             raise exceptions.ValidationError(_('Enter a valid ULID.'), code='invalid')

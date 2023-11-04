@@ -41,15 +41,13 @@ class ULIDField(models.Field):
         if value is None:
             return None
         if not isinstance(value, ulid.ULID):
-            value = self.to_python(value)
+            value = self.to_ulid(value)
         return value.uuid if connection.features.has_native_uuid_field else str(value)
 
     def from_db_value(self, value, expression, connection):
         return self.to_python(value)
 
-    def to_python(self, value):
-        if value is None:
-            return None
+    def to_ulid(self, value):
         try:
             return ulid.parse(value)
         except (AttributeError, ValueError):
@@ -58,6 +56,11 @@ class ULIDField(models.Field):
                 code='invalid',
                 params={'value': value}
             )
+        
+    def to_python(self, value):
+        if value is None:
+            return None
+        return str(self.to_ulid(value))
 
     def formfield(self, **kwargs):
         return super().formfield(**{

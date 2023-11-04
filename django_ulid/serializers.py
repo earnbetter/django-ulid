@@ -21,7 +21,7 @@ class ULIDField(fields.Field):
 
     def to_internal_value(self, data):
         try:
-            return ulid.parse(data)
+            return str(ulid.parse(data))
         except (AttributeError, ValueError):
             self.fail('invalid', value=data)
 
