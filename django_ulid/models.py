@@ -4,16 +4,15 @@
 
     Contains functionality for Django model support.
 """
-import ulid
+from ulid import ULID
 from django.core import exceptions
 from django.db import models
 from django.utils.translation import gettext as _
 
-from . import forms
+from . import forms, utils
 
 # Helper function so callers don't need to import the ulid package.
-def default():
-    return ulid.new()
+default = ULID
 
 
 class ULIDField(models.Field):
@@ -35,14 +34,14 @@ class ULIDField(models.Field):
         return name, path, args, kwargs
 
     def get_internal_type(self):
-        return 'UUIDField'
+        return 'ULIDField'
 
     def get_db_prep_value(self, value, connection, prepared=False):
         if value is None:
             return None
-        if not isinstance(value, ulid.ULID):
+        if not isinstance(value, ULID):
             value = self.to_python(value)
-        return value.uuid if connection.features.has_native_uuid_field else str(value)
+        return value.to_uuid() if connection.features.has_native_uuid_field else str(value)
 
     def from_db_value(self, value, expression, connection):
         return self.to_python(value)
@@ -51,7 +50,7 @@ class ULIDField(models.Field):
         if value is None:
             return None
         try:
-            return ulid.parse(value)
+            return utils.parse(value)
         except (AttributeError, ValueError):
             raise exceptions.ValidationError(
                 _("'%(value)s' is not a valid ULID."),

@@ -89,4 +89,4 @@ Pull requests will be brought into the `master` branch via a rebase and fast-for
 ### Dependencies
 
 * [Django](https://github.com/django/django)
-* [ulid-py](https://github.com/ahawker/ulid)
+* [python-ulid](https://github.com/mdomke/python-ulid)

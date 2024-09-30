@@ -4,11 +4,10 @@
 
     Contains functionality for Django REST Framework (DRF) serializer support.
 """
-import ulid
 from django.utils.translation import gettext as _
 from rest_framework import fields, serializers
 
-from . import models
+from . import models, utils
 
 
 class ULIDField(fields.Field):
@@ -21,12 +20,12 @@ class ULIDField(fields.Field):
 
     def to_internal_value(self, data):
         try:
-            return ulid.parse(data)
+            return utils.parse(data)
         except (AttributeError, ValueError):
             self.fail('invalid', value=data)
 
     def to_representation(self, value):
-        return str(ulid.parse(value))
+        return str(utils.parse(value))
 
 
 # Register the DRF serializer field with the Django ULID model field so the DRF model

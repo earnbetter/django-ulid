@@ -109,7 +109,7 @@ Dependencies
 ~~~~~~~~~~~~
 
 -  `Django <https://github.com/django/django>`__
--  `ulid-py <https://github.com/ahawker/ulid>`__
+-  `python-ulid <https://github.com/mdomke/python-ulid>`__
 
 .. |Build Status| image:: https://travis-ci.org/ahawker/django-ulid.svg?branch=master
    :target: https://travis-ci.org/ahawker/django-ulid

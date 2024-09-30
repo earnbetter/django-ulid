@@ -4,18 +4,19 @@
 
     Contains functionality for Django form support.
 """
-import ulid
+
 from django import forms
 from django.core import exceptions
 from django.utils.translation import gettext as _
 
+from .utils import parse
 
 class ULIDField(forms.CharField):
     """
     Django form field type for handling ULID values.
     """
     def prepare_value(self, value):
-        return str(ulid.parse(value)) if value is not None else ""
+        return str(parse(value)) if value is not None else ""
 
     def to_python(self, value):
         value = super().to_python(value)
@@ -23,6 +24,6 @@ class ULIDField(forms.CharField):
         if value in self.empty_values:
             return None
         try:
-            return ulid.parse(value)
+            return parse(value)
         except (AttributeError, ValueError):
             raise exceptions.ValidationError(_('Enter a valid ULID.'), code='invalid')
